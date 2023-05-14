@@ -1,11 +1,11 @@
 start: ## Start the project
-	docker-compose up -d
+	docker compose up -d
 
 stop: ## Stop the project
-	docker-compose down
+	docker compose down
 
 ip: ## Get the ip of the container
-	@docker-compose exec ubuntu hostname -I
+	@docker compose exec ubuntu hostname -I
 
 ansible: ## Run ansible playbook
 	ansible-playbook -i ./hosts -l servers ./playbooks/docker.yml --ask-become
