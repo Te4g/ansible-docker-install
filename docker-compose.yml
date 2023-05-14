@@ -1,0 +1,11 @@
+services:
+  ubuntu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      secrets:
+        - ssh_key
+
+secrets:
+  ssh_key:
+    file: ~/.ssh/key.pub

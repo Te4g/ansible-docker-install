@@ -1,0 +1,64 @@
+- name: Install docker
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Save original username
+      command: whoami
+      register: whoami
+      become: no
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Uninstall old versions
+      apt:
+        pkg:
+          - docker
+          - docker-common
+          - docker-engine
+        state: absent
+
+    - name: Install packages to allow apt to use a repository over HTTPS
+      apt:
+        pkg:
+          - ca-certificates
+          - curl
+          - gnupg
+
+    - name: Add Docker official GPG key
+      get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/trusted.gpg.d/docker.asc
+        mode: '0644'
+        force: true
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker Engine, containerd, and Docker Compose
+      apt:
+        pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+
+    - name: Create docker group
+      group:
+        name: "docker"
+        state: present
+
+    - name: Add remote user to "docker" group
+      user:
+        name: "{{ whoami.stdout }}"
+        groups: "docker"
+        append: yes
