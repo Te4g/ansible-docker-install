@@ -1,0 +1,6 @@
+---
+# handlers file for custom_ssh_port
+- name: Restart sshd
+  service:
+    name: ssh
+    state: restarted

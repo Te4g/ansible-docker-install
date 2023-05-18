@@ -1,0 +1,30 @@
+---
+# tasks file for fail2ban
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+    update_cache: yes
+
+- name: Add fail2ban custom config
+  template:
+      src: custom.conf.j2
+      dest: /etc/fail2ban/jail.d/custom.conf
+      owner: root
+      group: root
+      mode: 0640
+  notify: Restart fail2ban
+
+- name: Stat auth log file
+  stat:
+    path: "{{ auth_log_path }}"
+  register: fail2ban_auth
+
+- name: Touch auth log file
+  file:
+    path: "{{ auth_log_path }}"
+    state: touch
+    mode: "0640"
+  when:
+    - fail2ban_auth.stat.exists is defined
+    - not fail2ban_auth.stat.exists

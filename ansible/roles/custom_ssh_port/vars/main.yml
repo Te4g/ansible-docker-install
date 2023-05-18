@@ -1,0 +1,5 @@
+---
+# vars file for custom_ssh_port
+ssh_port: 4622
+iptables_path: /etc/iptables/rules.v4
+iptables_backup_path: /etc/iptables/rules.v4.bak

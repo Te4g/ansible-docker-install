@@ -1,0 +1,49 @@
+---
+# tasks file for custom_ssh_port
+- name: Install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Create iptables backup
+  community.general.iptables_state:
+    state: saved
+    path: "{{ iptables_backup_path }}"
+
+- name: Allow established sessions
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+
+- name: Allow custom SSH port
+  iptables:
+    chain: INPUT
+    destination_port: "{{ ssh_port }}"
+    protocol: tcp
+    jump: ACCEPT
+  become: yes
+
+- name: Change SSH port
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?Port'
+    line: 'Port {{ ssh_port }}'
+    state: present
+  become: yes
+  notify: Restart sshd
+
+- name: Deny standard SSH port
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: DROP
+  become: yes
+
+- name: Save iptables rules
+  community.general.iptables_state:
+    state: saved
+    path: "{{ iptables_path }}"

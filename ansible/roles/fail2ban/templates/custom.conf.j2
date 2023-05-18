@@ -1,0 +1,6 @@
+[sshd]
+enabled = true
+port = {{ ssh_port }}
+filter = sshd
+maxretry = 3
+logpath = %(sshd_log)s

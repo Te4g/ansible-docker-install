@@ -1,0 +1,7 @@
+- name: Add basic setup to secure a VPS
+  hosts: all
+  become: true
+  roles:
+    - fail2ban
+    - custom_ssh_port
+    - firewall_configuration

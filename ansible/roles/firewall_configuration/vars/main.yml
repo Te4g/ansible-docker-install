@@ -1,0 +1,4 @@
+---
+# vars file for firewall_configuration
+iptables_path: /etc/iptables/rules.v4
+iptables_backup_path: /etc/iptables/rules.v4.bak

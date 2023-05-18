@@ -8,10 +8,6 @@
       register: whoami
       become: no
 
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-
     - name: Uninstall old versions
       apt:
         pkg:
@@ -26,6 +22,7 @@
           - ca-certificates
           - curl
           - gnupg
+        update_cache: yes
 
     - name: Add Docker official GPG key
       get_url:
@@ -39,10 +36,6 @@
         repo: deb https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
         state: present
 
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-
     - name: Install Docker Engine, containerd, and Docker Compose
       apt:
         pkg:
@@ -51,6 +44,7 @@
           - containerd.io
           - docker-buildx-plugin
           - docker-compose-plugin
+        update_cache: yes
 
     - name: Create docker group
       group:

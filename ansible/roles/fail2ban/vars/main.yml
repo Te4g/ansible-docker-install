@@ -1,0 +1,4 @@
+---
+# vars file for fail2ban
+ssh_port: 4622
+auth_log_path: /var/log/auth.log

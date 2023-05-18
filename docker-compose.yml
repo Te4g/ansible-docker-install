@@ -3,9 +3,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: ubuntu
       secrets:
         - ssh_key
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "4622:4622"
+      - "2222:22"
+
+  ubuntu-root:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ubuntu-root
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "4623:4622"
+      - "2223:22"
 
 secrets:
   ssh_key:
-    file: ~/.ssh/key.pub
+    file: ~/.ssh/id_rsa.pub
