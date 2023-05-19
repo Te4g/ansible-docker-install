@@ -23,6 +23,9 @@ services:
       - "4623:4622"
       - "2223:22"
 
+  ansible:
+    image: ansible/awx
+
 secrets:
   ssh_key:
     file: ~/.ssh/id_rsa.pub
